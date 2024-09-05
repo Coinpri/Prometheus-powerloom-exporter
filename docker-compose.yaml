@@ -1,0 +1,10 @@
+services:
+  prometheus-powerloom-exporter:
+    build: .
+    ports:
+      - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"
+    environment:
+      - PROMETHEUS_PORT=${PROMETHEUS_PORT}
+      - SCRAPE_INTERVAL=${SCRAPE_INTERVAL}
+      - BASE_API_URL=${BASE_API_URL}
+    restart: unless-stopped
