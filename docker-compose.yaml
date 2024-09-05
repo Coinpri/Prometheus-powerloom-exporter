@@ -7,4 +7,5 @@ services:
       - PROMETHEUS_PORT=${PROMETHEUS_PORT}
       - SCRAPE_INTERVAL=${SCRAPE_INTERVAL}
       - BASE_API_URL=${BASE_API_URL}
+      - PROMETHEUS_PREFIX=${PROMETHEUS_PREFIX}
     restart: unless-stopped

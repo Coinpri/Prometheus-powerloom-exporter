@@ -7,9 +7,10 @@ from prometheus_client import start_http_server, Gauge
 BASE_API_URL = os.getenv('BASE_API_URL')
 PROMETHEUS_PORT = int(os.getenv('PROMETHEUS_PORT', '8000'))
 SCRAPE_INTERVAL = int(os.getenv('SCRAPE_INTERVAL', '30'))
+PROMETHEUS_PREFIX = os.getenv('PROMETHEUS_PREFIX', 'powerloom')
 
 # Define Prometheus Gauges (or Counters/Histograms depending on the use case)
-epochId = Gauge('epochId', 'Powerloom Epoch ID')
+epochId = Gauge(f'{PROMETHEUS_PREFIX}_epochId', 'Powerloom Epoch ID')
 
 # Function to fetch data for metric 1 and update the Gauge
 def fetch_epochId():
