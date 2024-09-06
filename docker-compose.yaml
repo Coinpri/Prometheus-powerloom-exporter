@@ -6,7 +6,6 @@ services:
     environment:
       - PROMETHEUS_PORT=${PROMETHEUS_PORT}
       - SCRAPE_INTERVAL=${SCRAPE_INTERVAL}
-      - PROMETHEUS_PREFIX=${PROMETHEUS_PREFIX}
     restart: unless-stopped
     volumes:
       - ./config.yaml:/config.yaml

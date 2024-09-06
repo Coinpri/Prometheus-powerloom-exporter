@@ -15,7 +15,12 @@ SCRAPE_INTERVAL={SCRAPE_INTERVAL}
 PROMETHEUS_PREFIX={PROMETHEUS_PREFIX}""")
 
 common_labels = [
-    "api_url"
+    "api_url",
+    "node"
+]
+
+status_metric_labels = [
+    "status"
 ]
 
 print("Loading config.yaml...", flush=True)
@@ -24,26 +29,51 @@ with open('config.yaml', 'r') as config_file:
     config = yaml.safe_load(config_file)
 
 print("Fetching node URLs from config", flush=True)
-node_urls = config.get('node_urls', [])
-print(f"Found the following node URLs:", flush=True)
-for url in node_urls:
-    print(url, flush=True)
+nodes = config.get('nodes', [])
+print(f"Found the following nodes:", flush=True)
+for node in nodes:
+    print(f"{node['name']} \t: {node['url']}", flush=True)
 
 print("Creating epochId metric", flush=True)
 # Define Prometheus Gauges (or Counters/Histograms depending on the use case)
 epochId = Gauge(f'{PROMETHEUS_PREFIX}_epochId', 'Powerloom Epoch ID', common_labels)
+status = Gauge(f'{PROMETHEUS_PREFIX}_status', 'Powerloom lite node status', common_labels + status_metric_labels)
 
 # Function to fetch data for metric 1 and update the Gauge
-def fetch_epochId(url: str):
+def fetch_epochId(node):
     try:
+        url = node['url']
+        name = node['name']
+
         response = requests.get(f'{url}/current_epoch')
         response.raise_for_status()
         data = response.json()
-        value1 = data.get('epochId', 0)
-        # Update Prometheus metric
-        epochId.labels(api_url=url).set(value1)
+        epoch_value = data.get('epochId', 0)
+
     except Exception as e:
-        print(f"Error fetching epoch ID for URL {url}: {e}", flush=True)
+        print(f"Error fetching epoch ID for node {name} at {url}: {e}", flush=True)
+        epoch_value = 0
+    epochId.labels(api_url=url, node=name).set(epoch_value)
+
+
+
+# Function to fetch data for metric 1 and update the Gauge
+def fetch_status(node):
+    try:
+        url = node['url']
+        name = node['name']
+
+        response = requests.get(f'{url}/health')
+        response.raise_for_status()
+        data = response.json()
+        status_value = data.get('status', "ERROR")
+
+    except Exception as e:
+        print(f"Error fetching health status for node {name} at {url}: {e}", flush=True)
+        status_value = "UNREACHABLE"
+    status.labels(api_url=url, node=name, status=status_value).set(1)
+
+
 
 
 def main():
@@ -53,10 +83,13 @@ def main():
     # Loop to fetch and update metrics periodically
     while True:
         print("Fetching data...", flush=True)
-        for url in node_urls:
-            print(f"Fetching epochId for {url}", flush=True)
-            fetch_epochId(url)  # Update epochId
-            print(f"Done, sleeping for {SCRAPE_INTERVAL} seconds...", flush=True)
+        for node in nodes:
+            url = node['url']
+            name = node['name']
+            print(f"Fetching epochId for {name} at {url}", flush=True)
+            fetch_epochId(node)  # Update epochId
+            fetch_status(node)
+        print(f"Done, sleeping for {SCRAPE_INTERVAL} seconds...", flush=True)
         time.sleep(SCRAPE_INTERVAL)  # Scrape interval
 
 if __name__ == "__main__":
