@@ -1,6 +1,6 @@
 services:
   prometheus-powerloom-exporter:
-    build: .
+    build: ..
     ports:
       - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"
     environment:

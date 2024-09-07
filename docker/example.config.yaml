@@ -1,0 +1,5 @@
+nodes:
+- name: "My node #1"
+  url: http://<your_node_ip_address_or_hostname>:<your_node_port>
+- name: "My node #2"
+  url: http://<your_node_ip_address_or_hostname>:<your_node_port>

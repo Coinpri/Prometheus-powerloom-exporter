@@ -1,3 +1,0 @@
-nodes:
-- name: some-arbitrary-name
-  url: http://<your_node_ip_address>:<your_node_port>
