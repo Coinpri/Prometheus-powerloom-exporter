@@ -15,7 +15,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "11.1.4"
+      "version": "11.1.3"
     },
     {
       "type": "datasource",
@@ -129,7 +129,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -137,10 +137,12 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum by (node) (powerloom_status{status!=\"OK\"})",
-          "instant": false,
+          "exemplar": false,
+          "expr": "sum (powerloom_status{status!=\"OK\"})",
+          "format": "table",
+          "instant": true,
           "legendFormat": "__auto",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
@@ -286,7 +288,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -521,7 +523,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -530,8 +532,8 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (node, api_url, status) (powerloom_status)",
-          "format": "table",
+          "expr": "sum by (node, api_url, status) (powerloom_status) != 0",
+          "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -578,6 +580,7 @@
             "excludeByName": {
               "1662": false,
               "Time": true,
+              "Trend #A": true,
               "Value": true,
               "Value 3": true,
               "fake_node": false,
@@ -636,7 +639,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -671,7 +675,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -722,7 +726,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           }
@@ -753,25 +758,31 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (status) (powerloom_status{node=\"$node_names\"})",
+          "expr": "sum by(status) (powerloom_status{node=\"$node_names\"}) != 0",
+          "format": "table",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
           "instant": true,
           "legendFormat": "{{status}}",
           "range": false,
-          "refId": "A"
+          "refId": "A",
+          "useBackend": false
         }
       ],
       "title": "Status",
       "transformations": [
         {
+          "disabled": true,
           "id": "labelsToFields",
           "options": {
             "keepLabels": [
@@ -798,7 +809,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -833,7 +845,7 @@
         "textMode": "name",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -909,7 +921,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -957,6 +970,7 @@
       "type": "timeseries"
     }
   ],
+  "refresh": "5s",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
@@ -1013,13 +1027,13 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Powerloom Lite Node Monitoring",
   "uid": "cdwz246s93abka",
-  "version": 1,
+  "version": 6,
   "weekStart": ""
 }

@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 3,
   "links": [],
   "panels": [
     {
@@ -86,7 +86,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -94,10 +94,12 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
-          "expr": "sum by (node) (powerloom_status{status!=\"OK\"})",
-          "instant": false,
+          "exemplar": false,
+          "expr": "sum (powerloom_status{status!=\"OK\"})",
+          "format": "table",
+          "instant": true,
           "legendFormat": "__auto",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
@@ -121,6 +123,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 17,
             "gradientMode": "none",
@@ -243,7 +246,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -282,6 +285,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 16,
             "gradientMode": "none",
@@ -478,7 +482,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.2.0",
       "targets": [
         {
           "datasource": {
@@ -487,8 +491,8 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (node, api_url, status) (powerloom_status)",
-          "format": "table",
+          "expr": "sum by (node, api_url, status) (powerloom_status) != 0",
+          "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -535,6 +539,7 @@
             "excludeByName": {
               "1662": false,
               "Time": true,
+              "Trend #A": true,
               "Value": true,
               "Value 3": true,
               "fake_node": false,
@@ -628,7 +633,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -710,25 +715,31 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "P1809F7CD0C75ACF3"
           },
+          "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (status) (powerloom_status{node=\"$node_names\"})",
+          "expr": "sum by(status) (powerloom_status{node=\"$node_names\"}) != 0",
+          "format": "table",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
           "instant": true,
           "legendFormat": "{{status}}",
           "range": false,
-          "refId": "A"
+          "refId": "A",
+          "useBackend": false
         }
       ],
       "title": "Status",
       "transformations": [
         {
+          "disabled": true,
           "id": "labelsToFields",
           "options": {
             "keepLabels": [
@@ -790,7 +801,7 @@
         "textMode": "name",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.1.3",
       "targets": [
         {
           "datasource": {
@@ -914,6 +925,7 @@
       "type": "timeseries"
     }
   ],
+  "refresh": "5s",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
@@ -921,8 +933,8 @@
       {
         "current": {
           "selected": false,
-          "text": "http://10.33.30.32:8002",
-          "value": "http://10.33.30.32:8002"
+          "text": "http://my-powerloom-node:8002",
+          "value": "http://my-powerloom-node:8002"
         },
         "datasource": {
           "type": "prometheus",
@@ -978,7 +990,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
