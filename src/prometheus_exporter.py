@@ -97,6 +97,8 @@ def main():
             name = node['name']
             print(f"Fetching epochId for {name} at {url}", flush=True)
             fetch_epochId(node)  # Update epochId
+            print(f"Fetching status for {name} at {url}", flush=True)
+
             fetch_status(node)
         print(f"Done, sleeping for {SCRAPE_INTERVAL} seconds...", flush=True)
         time.sleep(SCRAPE_INTERVAL)  # Scrape interval
