@@ -79,7 +79,7 @@ def fetch_status(node):
     }
     node_statuses[status] = 1
 
-    for status_name, statut_value in node_statuses.items():
+    for status_name, status_value in node_statuses.items():
         status.labels(api_url=url, node=name, status=status_name).set(status_value)
 
 
