@@ -77,7 +77,7 @@ def fetch_status(node):
         "ERROR":0,
         "OK":0
     }
-    node_statuses[status] = 1
+    node_statuses[status_value] = 1
 
     for status_name, status_value in node_statuses.items():
         status.labels(api_url=url, node=name, status=status_name).set(status_value)
