@@ -71,7 +71,16 @@ def fetch_status(node):
     except Exception as e:
         print(f"Error fetching health status for node {name} at {url}: {e}", flush=True)
         status_value = "UNREACHABLE"
-    status.labels(api_url=url, node=name, status=status_value).set(1)
+
+    node_statuses = {
+        "UNREACHABLE":0,
+        "ERROR":0,
+        "OK":0
+    }
+    node_statuses[status] = 1
+
+    for status_name, statut_value in node_statuses.items():
+        status.labels(api_url=url, node=name, status=status_name).set(status_value)
 
 
 
